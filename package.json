@@ -1,0 +1,23 @@
+{
+  "name": "users-api",
+  "version": "0.1.0",
+  "description": "This API allows all RESTL operations over the dataset hosted in https://gist.githubusercontent.com/jasonmadigan/009c15b5dc4b4eccd32b/raw/34759c44e77d2f3515e20ed561cdd7a5e8345585/users.json.",
+  "scripts": {
+    "start": "node dist/src/server.js",
+    "pre-start": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josemigallas/users-api.git"
+  },
+  "author": "Jose Miguel Gallas Olmedo",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.0.36",
+    "typescript": "^2.4.1"
+  }
+}
