@@ -6,3 +6,7 @@ node_modules/
 
 # Builds
 dist/
+
+# Realm Database
+database/
+realm-object-server/
