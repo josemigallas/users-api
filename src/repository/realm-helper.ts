@@ -5,6 +5,8 @@ import NameSchema from "./schema/name-schema";
 import PictureSchema from "./schema/picture-schema";
 import UserSchema from "./schema/user-schema";
 
+import User from "../model/user";
+
 export default class RealmHelper {
 
     private static _realm: Realm;
@@ -24,6 +26,13 @@ export default class RealmHelper {
             RealmHelper._realm = new Realm(RealmHelper._config);
         }
         return new Realm(RealmHelper._config);
+    }
+
+    static getUsers(): User[] {
+        const results: Realm.Results<User> = RealmHelper.getDefaultRealm()
+            .objects(UserSchema.name);
+
+        return Array.prototype.slice.call(results, 0, results.length);
     }
 
 }

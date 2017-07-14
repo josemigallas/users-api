@@ -7,10 +7,9 @@ import User from "../model/user";
 const index: Router = Router();
 
 index.get("/", (req, res) => {
-    const realm: Realm = RealmHelper.getDefaultRealm();
-    const user: User = realm.objectForPrimaryKey(UserSchema.name, "tinywolf709")
+    const users: User[] = RealmHelper.getUsers();
 
-    res.send(user);
+    res.send(users);
 });
 
 export default index;
