@@ -1,9 +1,9 @@
-import * as Realm from 'realm';
+import * as Realm from "realm";
 
-import LocationSchema from './schema/location-schema';
-import NameSchema from './schema/name-schema';
-import PictureSchema from './schema/picture-schema';
-import UserSchema from './schema/user-schema';
+import LocationSchema from "./schema/location-schema";
+import NameSchema from "./schema/name-schema";
+import PictureSchema from "./schema/picture-schema";
+import UserSchema from "./schema/user-schema";
 
 export default class RealmHelper {
 
