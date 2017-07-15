@@ -62,6 +62,8 @@ export default class RealmHelper {
             .objectForPrimaryKey(UserSchema.name, username);
     }
 
+    // TODO get by filtering, not only primary key
+
     static addUser(user: User): User | void {
         const realm: Realm = this.defaultRealm;
 
@@ -74,15 +76,20 @@ export default class RealmHelper {
     // Update can be done by "creating" an entity with the same primary key or retrieving it from the Realm
     // and changing its properties
 
-    // DELETE
     static deleteUser(username: string): void {
         const realm = this.defaultRealm;
         const user: User = realm.objectForPrimaryKey(UserSchema.name, username);
+
+        if (!user) {
+            return;
+        }
 
         realm.write(() => {
             return realm.delete(user);
         })
     }
+
+    // TODO delete by filtering, not only primary key
 
     // LIST
 }

@@ -81,3 +81,25 @@ describe("addUser", () => {
     });
 
 });
+
+describe("deleteUser", () => {
+
+    it("should delete an existing user in the DB", () => {
+        const usersBeforeDeletion = RealmHelper.getUsers();
+        expect(usersBeforeDeletion.length).toEqual(TestUsers.length);
+
+        const userToBeDeleted: User = TestUsers[0];
+        RealmHelper.deleteUser(userToBeDeleted.username);
+
+        const usersAfterDeletion = RealmHelper.getUsers();
+        expect(usersAfterDeletion.length).toEqual(TestUsers.length - 1);
+    });
+
+    it("should not throw if trying to delete a nonexistent user", () => {
+        const nonExistentUsername: string = "TheThing67";
+        const test = () => RealmHelper.deleteUser(nonExistentUsername);
+
+        expect(test).not.toThrowError();
+    });
+
+});
