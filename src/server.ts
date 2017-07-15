@@ -11,6 +11,11 @@ import index from "./routes/index";
 
 app.use("/", index);
 
+// Realm configuration
+import RealmHelper from "./repository/realm-helper";
+
+RealmHelper.init();
+
 app.listen(3000, () => {
     console.log("Users API listening on port 3000...");
 })
