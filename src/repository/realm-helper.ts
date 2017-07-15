@@ -6,6 +6,9 @@ import PictureSchema from "./schema/picture-schema";
 import UserSchema from "./schema/user-schema";
 import User from '../model/user';
 
+/**
+ * Helper class that setup the Realm DB and serves as data access layer.
+ */
 export default class RealmHelper {
 
     private static _realm: Realm;
@@ -31,9 +34,6 @@ export default class RealmHelper {
         return this._config;
     }
 
-    /**
-     * Initialization method for the Database, intenden to be called when the server app starts up.
-     */
     public static init(): void {
         const realm = this.defaultRealm;
 
@@ -57,7 +57,6 @@ export default class RealmHelper {
         return Array.prototype.slice.call(results, 0, results.length);
     }
 
-    // READ
     static getUserByUsername(username: string): User {
         return this.defaultRealm
             .objectForPrimaryKey(UserSchema.name, username);
