@@ -7,9 +7,7 @@ import User from "../model/user";
 const index: Router = Router();
 
 index.get("/", (req, res) => {
-    const users: User[] = RealmHelper.getUsers();
-
-    res.send(users);
+    res.send("Hello from Users API!");
 });
 
 export default index;
