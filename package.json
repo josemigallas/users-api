@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node dist/src/server.js",
     "postinstall": "node_modules/typescript/bin/tsc -p . && cp src/repository/seed.json dist/src/repository/",
-    "test": "tsc && jasmine"
+    "test": "tsc && jasmine",
+    "posttest": "rm -r database/test"
   },
   "repository": {
     "type": "git",
