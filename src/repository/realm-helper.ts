@@ -62,11 +62,8 @@ export default class RealmHelper {
             .objectForPrimaryKey(UserSchema.name, username);
     }
 
-    // CREATE
     static addUser(user: User): User | void {
         const realm: Realm = this.defaultRealm;
-
-        // TODO check if user exists, if so throw Error.
 
         realm.write(() => {
             return realm.create(UserSchema.name, user);

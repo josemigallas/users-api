@@ -58,3 +58,26 @@ describe("getUserById", () => {
     });
 
 });
+
+describe("addUser", () => {
+
+    it("should create a new user in the DB", () => {
+        const usersBeforeAddition = RealmHelper.getUsers();
+        expect(usersBeforeAddition.length).toEqual(TestUsers.length);
+
+        const newUser: User = TestUsers[0];
+        newUser.username = "spiderman1991";
+        RealmHelper.addUser(newUser);
+
+        const usersAfterAddition = RealmHelper.getUsers();
+        expect(usersAfterAddition.length).toEqual(TestUsers.length + 1);
+    });
+
+    it("should throw if trying to add an existing user", () => {
+        const existingUser: User = TestUsers[0];
+        const test = () => RealmHelper.addUser(existingUser);
+
+        expect(test).toThrowError();
+    });
+
+});
