@@ -20,14 +20,15 @@ export default class RealmHelper {
         ]
     };
 
-    /**
-     * Singleton getter for the Realm.
-     */
-    private static get defaultRealm(): Realm {
+    public static get defaultRealm(): Realm {
         if (!this._realm) {
-            this._realm = new Realm(this._config);
+            this._realm = new Realm(this.config);
         }
-        return new Realm(this._config);
+        return new Realm(this.config);
+    }
+
+    public static get config(): Realm.Configuration {
+        return this._config;
     }
 
     /**
@@ -49,11 +50,8 @@ export default class RealmHelper {
         });
     }
 
-    /**
-     * Gets an array of all users in the realm.
-     */
     static getUsers(): User[] {
-        const results: Realm.Results<User> = RealmHelper.defaultRealm
+        const results: Realm.Results<User> = this.defaultRealm
             .objects(UserSchema.name);
 
         return Array.prototype.slice.call(results, 0, results.length);
@@ -65,4 +63,30 @@ export default class RealmHelper {
             .objectForPrimaryKey(UserSchema.name, username);
     }
 
+    // CREATE
+    static addUser(user: User): User | void {
+        const realm: Realm = this.defaultRealm;
+
+        // TODO check if user exists, if so throw Error.
+
+        realm.write(() => {
+            return realm.create(UserSchema.name, user);
+        });
+    }
+
+    // UPDATE
+    // Update can be done by "creating" an entity with the same primary key or retrieving it from the Realm
+    // and changing its properties
+
+    // DELETE
+    static deleteUser(username: string): void {
+        const realm = this.defaultRealm;
+        const user: User = realm.objectForPrimaryKey(UserSchema.name, username);
+
+        realm.write(() => {
+            return realm.delete(user);
+        })
+    }
+
+    // LIST
 }
