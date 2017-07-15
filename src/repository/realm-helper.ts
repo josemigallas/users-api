@@ -59,4 +59,10 @@ export default class RealmHelper {
         return Array.prototype.slice.call(results, 0, results.length);
     }
 
+    // READ
+    static getUserByUsername(username: string): User {
+        return this.defaultRealm
+            .objectForPrimaryKey(UserSchema.name, username);
+    }
+
 }

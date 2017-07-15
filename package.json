@@ -4,7 +4,8 @@
   "description": "This API allows all RESTL operations over the dataset hosted in https://gist.githubusercontent.com/jasonmadigan/009c15b5dc4b4eccd32b/raw/34759c44e77d2f3515e20ed561cdd7a5e8345585/users.json.",
   "scripts": {
     "start": "node dist/src/server.js",
-    "postinstall": "node_modules/typescript/bin/tsc -p . && cp src/repository/seed.json dist/src/repository/"
+    "postinstall": "node_modules/typescript/bin/tsc -p . && cp src/repository/seed.json dist/src/repository/",
+    "test": "tsc && jasmine"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,8 @@
     "typescript": "^2.4.1"
   },
   "devDependencies": {
-    "@types/express": "^4.0.36",
-    "@types/realm": "^1.0.3"
+    "@types/jasmine": "^2.5.53",
+    "@types/realm": "^1.0.3",
+    "jasmine": "^2.6.0"
   }
 }
