@@ -115,13 +115,35 @@ describe("RealmHelper", () => {
             const userBeforeUpdating = RealmHelper.getUserByUsername(TEST_USER.username);
 
             const newEmail: string = "josemigallas@example.com";
-            expect(TEST_USER.email).not.toEqual(newEmail);
+            expect(userBeforeUpdating.email).not.toEqual(newEmail);
             TEST_USER.email = newEmail;
 
             RealmHelper.updateUser(TEST_USER);
 
             const userAfterUpdating = RealmHelper.getUserByUsername(TEST_USER.username);
             expect(userAfterUpdating.email).toEqual(newEmail);
+        });
+
+        it("should update a user of the DB even if some properties are undefined", () => {
+            const userBeforeUpdating = RealmHelper.getUserByUsername(TEST_USER.username);
+
+            // Check value to update is different
+            const newEmail: string = "josemigallas@example.com";
+            expect(userBeforeUpdating.email).not.toEqual(newEmail);
+
+            // Check some value that won't be changed
+            const originalDob: number = userBeforeUpdating.dob;
+
+            const userToUpdate: User = {
+                username: TEST_USER.username,
+                email: newEmail
+            };
+
+            RealmHelper.updateUser(userToUpdate);
+
+            const userAfterUpdating = RealmHelper.getUserByUsername(TEST_USER.username);
+            expect(userAfterUpdating.email).toEqual(newEmail);
+            expect(userAfterUpdating.dob).toEqual(originalDob);
         });
 
         it("should throw if trying to update a nonexistent user", () => {

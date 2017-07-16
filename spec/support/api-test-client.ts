@@ -21,7 +21,6 @@ export default class ApiTestClient {
 
     public static createUser(user: User): Promise<any> {
         const options = {
-            method: 'POST',
             uri: `${this.URL}/users`,
             body: user,
             json: true,
@@ -31,4 +30,14 @@ export default class ApiTestClient {
         return request.post(options);
     }
 
+        public static updateUser(user: User): Promise<any> {
+        const options = {
+            uri: `${this.URL}/users`,
+            body: user,
+            json: true,
+            resolveWithFullResponse: true
+        };
+
+        return request.put(options);
+    }
 }

@@ -79,6 +79,7 @@ export default class RealmHelper {
     static getFilterQueryForUser(user: User): string {
         let query: string = "";
 
+        // TODO refactor this kamehameha
         for (const key in user) {
             if (typeof user[key] !== "object") {
                 if (user[key]) {
@@ -105,22 +106,32 @@ export default class RealmHelper {
     }
 
     static addUser(user: User): User | void {
-        return this.createUser(user, false);
-    }
-
-    static updateUser(user: User): User | void {
-        if (!this.getUserByUsername(user.username)) {
-            throw new Error(`User: ${user.username} does not exist`);
-        }
-
-        this.createUser(user, true);
-    }
-
-    private static createUser(user: User, update: boolean): User | void {
         const realm: Realm = this.defaultRealm;
 
         realm.write(() => {
-            return realm.create(UserSchema.name, user, update);
+            return realm.create(UserSchema.name, user, false);
+        });
+    }
+
+    static updateUser(newUser: User): User | void {
+        const user: User = this.getUserByUsername(newUser.username);
+
+        if (!user) {
+            throw new Error(`User: ${newUser.username} does not exist`);
+        }
+
+        const assignEach = (values, object) => {
+            for (const key in values) {
+                if (typeof values[key] !== "object" && key !== "username") {
+                    object[key] = values[key];
+                } else {
+                    assignEach(values[key], object[key]);
+                }
+            }
+        }
+
+        this.defaultRealm.write(() => {
+            assignEach(newUser, user);
         });
     }
 

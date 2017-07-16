@@ -39,4 +39,24 @@ users.post("/", (req, res) => {
     res.sendStatus(201);
 });
 
+/**
+ * Updates an existing user or throws an error if it doesn't. User model are sent in the body of the request.
+ * Properties that won't be changed can be undefined but the entity must match the model.
+ */
+users.put("/", (req, res) => {
+    const user: User = req.body;
+
+    try {
+        RealmHelper.updateUser(user);
+        return res.sendStatus(200);
+    } catch (e) {
+        if (e.message.indexOf("does not exist") !== -1) {
+            return res.status(404).send(e);
+        }
+        return res.status(500).send(e.message);
+    }
+});
+
+// TODO Delete
+
 export default users;

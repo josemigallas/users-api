@@ -15,7 +15,7 @@ import ApiTestClient from "../support/api-test-client";
 
 describe("Route users", () => {
 
-    const TEST_USER = TestUsers[0];
+    const TEST_USER = JSON.parse(JSON.stringify(TestUsers[0]));
     const TEST_CONFIG: Realm.Configuration = {
         path: "database/test/users",
         schema: [
@@ -99,7 +99,7 @@ describe("Route users", () => {
                     done();
                 })
                 .catch(err => {
-                    expect(err.statusCode).toEqual(201);
+                    fail(err);
                     done();
                 });
         });
@@ -115,6 +115,81 @@ describe("Route users", () => {
                 })
                 .catch(err => {
                     expect(err.statusCode).toEqual(409);
+                    done();
+                });
+        });
+    });
+
+    describe("PUT /users", () => {
+
+        it("returns 200 if the user is succesfully updated", done => {
+            const userToUpdate: User = JSON.parse(JSON.stringify(TEST_USER));
+            const userBeforeUpdating: User = RealmHelper.getUserByUsername(userToUpdate.username);
+            expect(userBeforeUpdating.email).toEqual(userToUpdate.email);
+
+            userToUpdate.email += "-updated";
+
+            ApiTestClient
+                .updateUser(userToUpdate)
+                .then(res => {
+                    expect(res.statusCode).toEqual(200);
+
+                    const userAfterUpdating: User = RealmHelper.getUserByUsername(userToUpdate.username);
+                    expect(userAfterUpdating.email).toEqual(userToUpdate.email);
+
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+        });
+
+        it("should update even if some user's properties are undefined", done => {
+            const userToUpdate: User = {
+                username: TEST_USER.username,
+                location: {
+                    city: TEST_USER.location.city
+                }
+            };
+
+            const userBeforeUpdating: User = RealmHelper.getUserByUsername(userToUpdate.username);
+            expect(userBeforeUpdating.location.city).toEqual(userToUpdate.location.city);
+
+            userToUpdate.location.city += " of tht South";
+
+            ApiTestClient
+                .updateUser(userToUpdate)
+                .then(res => {
+                    expect(res.statusCode).toEqual(200);
+
+                    const userAfterUpdating: User = RealmHelper.getUserByUsername(userToUpdate.username);
+                    expect(userAfterUpdating.location.city).toEqual(userToUpdate.location.city);
+
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+        });
+
+        it("returns 404 if user does not exist", done => {
+            const userToUpdate: User = {
+                username: "whatever"
+            };
+
+            const nonExistentUser: User = RealmHelper.getUserByUsername(userToUpdate.username);
+            expect(nonExistentUser).toBeFalsy();
+
+            ApiTestClient
+                .updateUser(userToUpdate)
+                .then(res => {
+                    fail("It should have thrown a 404 error");
+                    done();
+                })
+                .catch(err => {
+                    expect(err.statusCode).toEqual(404);
                     done();
                 });
         });
