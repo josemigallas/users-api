@@ -75,8 +75,6 @@ export default class RealmHelper {
     static getFilterQueryForUser(user: User): string {
         let query: string = "";
 
-        // TODO check if numbers must also be filtered within quotes
-        // "zip = '12345'" or "zip = 12345"
         for (const key in user) {
             if (typeof user[key] !== "object") {
                 if (user[key]) {

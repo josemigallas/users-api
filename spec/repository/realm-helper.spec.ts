@@ -209,7 +209,6 @@ describe("findUsers", () => {
         expect(filteredByLocation.length).toEqual(2);
     });
 
-
     it("should filter by gender", () => {
         const genderFilter: User = {
             gender: "male"
@@ -250,6 +249,20 @@ describe("findUsers", () => {
 
         const filteredByWrongTitle: User[] = RealmHelper.findUsers(nameFilter);
         expect(filteredByWrongTitle.length).toEqual(0);
+    });
+
+    it("should filter by zip code", () => {
+        const zipFilter: User = {
+            location: { zip: 12345 }
+        };
+
+        let filteredByZip: User[] = RealmHelper.findUsers(zipFilter);
+        expect(filteredByZip.length).toEqual(2);
+
+        zipFilter.location.zip = 99999;
+
+        filteredByZip = RealmHelper.findUsers(zipFilter);
+        expect(filteredByZip.length).toEqual(1);
     });
 
 });
