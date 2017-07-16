@@ -7,7 +7,7 @@ import NameSchema from "../../src/repository/schema/name-schema";
 import LocationSchema from "../../src/repository/schema/location-schema";
 import PictureSchema from "../../src/repository/schema/picture-schema";
 
-import TestUsers from "./test-users";
+import TestUsers from "../support/test-users";
 
 const TEST_USER = TestUsers[0];
 const TEST_CONFIG: Realm.Configuration = {
