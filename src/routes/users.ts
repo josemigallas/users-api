@@ -29,7 +29,14 @@ users.get("/:username", (req, res) => {
  * Adds a new user or throws an error if it exists already. User model are sent in the body of the request.
  */
 users.post("/", (req, res) => {
-    res.status(404).send("Not yet implemented");
+    const user: User = req.body;
+
+    if (RealmHelper.getUserByUsername(user.username)) {
+        return res.status(409).send("User already exists");
+    }
+
+    RealmHelper.addUser(user);
+    res.sendStatus(201);
 });
 
 export default users;

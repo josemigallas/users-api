@@ -105,7 +105,7 @@ export default class RealmHelper {
     }
 
     static addUser(user: User): User | void {
-        this.createUser(user, false);
+        return this.createUser(user, false);
     }
 
     static updateUser(user: User): User | void {

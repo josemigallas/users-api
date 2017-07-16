@@ -24,11 +24,11 @@ export default class ApiTestClient {
             method: 'POST',
             uri: `${this.URL}/users`,
             body: user,
-            json: true
+            json: true,
+            resolveWithFullResponse: true
         };
 
-        return request.post(options)
-            .then(JSON.parse);
+        return request.post(options);
     }
 
 }

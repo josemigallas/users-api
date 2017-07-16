@@ -86,20 +86,12 @@ describe("Route users", () => {
 
     describe("POST /users", () => {
 
-        const newUser: User = {
-            username: "newUser",
-            name: {
-                title: "title",
-                first: "Jon",
-                last: "Snow"
-            },
-            location: {
-                city: "Black Castle",
-                state: "Ice Wall"
-            }
-        };
+        const newUser: User = JSON.parse(JSON.stringify(TEST_USER));
+        newUser.username = "newUser";
 
-        it("returns 201 if the user didn't exist already", done => {
+        it("returns 201 if the user is succesfully created", done => {
+            RealmHelper.deleteUser(newUser.username);
+
             ApiTestClient
                 .createUser(newUser)
                 .then(res => {
@@ -107,12 +99,14 @@ describe("Route users", () => {
                     done();
                 })
                 .catch(err => {
-                    fail(err);
+                    expect(err.statusCode).toEqual(201);
                     done();
                 });
         });
 
         it("returns 409 if user exists already", done => {
+            RealmHelper.addUser(newUser);
+
             ApiTestClient
                 .createUser(newUser)
                 .then(res => {

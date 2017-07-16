@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node dist/src/server.js",
     "postinstall": "node_modules/typescript/bin/tsc -p . && cp src/repository/seed.json dist/src/repository/",
-    "test": "node_modules/typescript/bin/tsc -p . && node_modules/.bin/jasmine",
+    "test": "node_modules/.bin/jasmine",
     "posttest": "rm -r database/test",
     "clean": "rm -r node_modules database realm-object-server dist"
   },
