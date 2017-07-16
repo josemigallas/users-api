@@ -25,4 +25,11 @@ users.get("/:username", (req, res) => {
     }
 });
 
+/**
+ * Adds a new user or throws an error if it exists already. User model are sent in the body of the request.
+ */
+users.post("/", (req, res) => {
+    res.status(404).send("Not yet implemented");
+});
+
 export default users;

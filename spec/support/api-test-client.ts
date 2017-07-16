@@ -19,4 +19,16 @@ export default class ApiTestClient {
             .then(JSON.parse);
     }
 
+    public static createUser(user: User): Promise<any> {
+        const options = {
+            method: 'POST',
+            uri: `${this.URL}/users`,
+            body: user,
+            json: true
+        };
+
+        return request.post(options)
+            .then(JSON.parse);
+    }
+
 }
