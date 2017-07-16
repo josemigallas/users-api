@@ -6,6 +6,9 @@ import PictureSchema from "./schema/picture-schema";
 import UserSchema from "./schema/user-schema";
 import User from '../model/user';
 
+/**
+ * Helper class that setup the Realm DB and serves as data access layer.
+ */
 export default class RealmHelper {
 
     private static _realm: Realm;
@@ -20,19 +23,17 @@ export default class RealmHelper {
         ]
     };
 
-    /**
-     * Singleton getter for the Realm.
-     */
-    private static get defaultRealm(): Realm {
+    public static get defaultRealm(): Realm {
         if (!this._realm) {
-            this._realm = new Realm(this._config);
+            this._realm = new Realm(this.config);
         }
-        return new Realm(this._config);
+        return new Realm(this.config);
     }
 
-    /**
-     * Initialization method for the Database, intenden to be called when the server app starts up.
-     */
+    public static get config(): Realm.Configuration {
+        return this._config;
+    }
+
     public static init(): void {
         const realm = this.defaultRealm;
 
@@ -49,14 +50,90 @@ export default class RealmHelper {
         });
     }
 
-    /**
-     * Gets an array of all users in the realm.
-     */
     static getUsers(): User[] {
-        const results: Realm.Results<User> = RealmHelper.defaultRealm
+        const results: Realm.Results<User> = this.defaultRealm
             .objects(UserSchema.name);
 
         return Array.prototype.slice.call(results, 0, results.length);
     }
 
+    static getUserByUsername(username: string): User {
+        return this.defaultRealm
+            .objectForPrimaryKey(UserSchema.name, username);
+    }
+
+    static findUsers(filter: User): User[] {
+        const query: string = this.getFilterQueryForUser(filter);
+
+        const results: Realm.Results<User> = this.defaultRealm
+            .objects(UserSchema.name)
+            .filtered(query);
+
+        return Array.prototype.slice.call(results, 0, results.length);
+    }
+
+    static getFilterQueryForUser(user: User): string {
+        let query: string = "";
+
+        for (const key in user) {
+            if (typeof user[key] !== "object") {
+                if (user[key]) {
+                    if (key.match(".*Max")) {
+                        query += `${key.slice(0, -3)} <= "${user[key]}" AND `;
+                    } else if (key.match(".*Min")) {
+                        query += `${key.slice(0, -3)} >= "${user[key]}" AND `;
+                    } else {
+                        query += `${key} = "${user[key]}" AND `;
+                    }
+                }
+            } else {
+                for (const subkey in user[key]) {
+                    if (user[key][subkey]) {
+                        query += `${key}.${subkey} = "${user[key][subkey]}" AND `;
+                    }
+                }
+            }
+        }
+
+        query = query.slice(0, -5)
+
+        return query;
+    }
+
+    static addUser(user: User): User | void {
+        this.createUser(user, false);
+    }
+
+    static updateUser(user: User): User | void {
+        if (!this.getUserByUsername(user.username)) {
+            throw new Error(`User: ${user.username} does not exist`);
+        }
+
+        this.createUser(user, true);
+    }
+
+    private static createUser(user: User, update: boolean): User | void {
+        const realm: Realm = this.defaultRealm;
+
+        realm.write(() => {
+            return realm.create(UserSchema.name, user, update);
+        });
+    }
+
+    static deleteUser(username: string): void {
+        const realm = this.defaultRealm;
+        const user: User = realm.objectForPrimaryKey(UserSchema.name, username);
+
+        if (!user) {
+            return;
+        }
+
+        realm.write(() => {
+            return realm.delete(user);
+        })
+    }
+
+    // TODO delete by filtering, not only primary key
+
+    // LIST
 }

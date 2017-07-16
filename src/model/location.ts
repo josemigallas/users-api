@@ -1,8 +1,8 @@
 export default interface Location {
 
-    street: string;
-    city: string;
-    state: string;
-    zip: number;
+    street?: string;
+    city?: string;
+    state?: string;
+    zip?: number;
 
 }
