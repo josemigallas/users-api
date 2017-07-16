@@ -78,7 +78,13 @@ export default class RealmHelper {
         for (const key in user) {
             if (typeof user[key] !== "object") {
                 if (user[key]) {
-                    query += `${key} = "${user[key]}" AND `;
+                    if (key.match(".*Max")) {
+                        query += `${key.slice(0, -3)} <= "${user[key]}" AND `;
+                    } else if (key.match(".*Min")) {
+                        query += `${key.slice(0, -3)} >= "${user[key]}" AND `;
+                    } else {
+                        query += `${key} = "${user[key]}" AND `;
+                    }
                 }
             } else {
                 for (const subkey in user[key]) {

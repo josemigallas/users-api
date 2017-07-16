@@ -1,6 +1,7 @@
 import RealmHelper from "../../src/repository/realm-helper";
 
 import User from "../../src/model/user";
+import UserDateFilter from "../../src/model/user-date-filter";
 import Location from "../../src/model/location";
 import Name from "../../src/model/name";
 
@@ -192,6 +193,47 @@ describe("getFilterQueryForUser", () => {
         expect(RealmHelper.getFilterQueryForUser(filter)).toEqual(expectedQuery);
     });
 
+
+    it("should return a well formed query for max date filters", () => {
+        const maxDateFilter: UserDateFilter = {
+            dobMax: 999,
+            registeredMax: 999
+        };
+
+        let expectedMaxDateQuery: string = `dob <= "${maxDateFilter.dobMax}" AND `;
+        expectedMaxDateQuery += `registered <= "${maxDateFilter.registeredMax}"`;
+
+        expect(RealmHelper.getFilterQueryForUser(maxDateFilter)).toEqual(expectedMaxDateQuery);
+    });
+
+    it("should return a well formed query for min date filters", () => {
+        const minDateFilter: UserDateFilter = {
+            dobMin: 111,
+            registeredMin: 999
+        };
+
+        let expectedMinDateQuery: string = `dob >= "${minDateFilter.dobMin}" AND `;
+        expectedMinDateQuery += `registered >= "${minDateFilter.registeredMin}"`;
+
+        expect(RealmHelper.getFilterQueryForUser(minDateFilter)).toEqual(expectedMinDateQuery);
+    });
+
+    it("should return a well formed query for date interval filters", () => {
+        const intervalDateFilter: UserDateFilter = {
+            dobMin: 1,
+            dobMax: 2,
+            registeredMin: 10,
+            registeredMax: 20
+        }
+
+        let expectedIntervalDateQuery: string = `dob >= "${intervalDateFilter.dobMin}" AND `;
+        expectedIntervalDateQuery += `dob <= "${intervalDateFilter.dobMax}" AND `;
+        expectedIntervalDateQuery += `registered >= "${intervalDateFilter.registeredMin}" AND `;
+        expectedIntervalDateQuery += `registered <= "${intervalDateFilter.registeredMax}"`;
+
+        expect(RealmHelper.getFilterQueryForUser(intervalDateFilter)).toEqual(expectedIntervalDateQuery);
+    });
+
 });
 
 describe("findUsers", () => {
@@ -263,6 +305,64 @@ describe("findUsers", () => {
 
         filteredByZip = RealmHelper.findUsers(zipFilter);
         expect(filteredByZip.length).toEqual(1);
+    });
+
+    it("should filter by max date", () => {
+        const maxDateFilter: UserDateFilter = {
+            dobMax: 932871967
+        };
+
+        let filteredByMaxDate: User[] = RealmHelper.findUsers(maxDateFilter);
+        expect(filteredByMaxDate.length).toEqual(0);
+
+        maxDateFilter.dobMax = 932871968;
+        filteredByMaxDate = RealmHelper.findUsers(maxDateFilter);
+        expect(filteredByMaxDate.length).toEqual(1);
+
+        maxDateFilter.dobMax = 932871969;
+        filteredByMaxDate = RealmHelper.findUsers(maxDateFilter);
+        expect(filteredByMaxDate.length).toEqual(2);
+
+        maxDateFilter.dobMax = 932871970;
+        filteredByMaxDate = RealmHelper.findUsers(maxDateFilter);
+        expect(filteredByMaxDate.length).toEqual(3);
+    });
+
+    it("should filter by min date", () => {
+        const minDateFilter: UserDateFilter = {
+            dobMin: 932871968
+        };
+
+        let filteredByMaxDate: User[] = RealmHelper.findUsers(minDateFilter);
+        expect(filteredByMaxDate.length).toEqual(3);
+
+        minDateFilter.dobMin = 932871969;
+        filteredByMaxDate = RealmHelper.findUsers(minDateFilter);
+        expect(filteredByMaxDate.length).toEqual(2);
+
+        minDateFilter.dobMin = 932871970;
+        filteredByMaxDate = RealmHelper.findUsers(minDateFilter);
+        expect(filteredByMaxDate.length).toEqual(1);
+
+        minDateFilter.dobMin = 932871971;
+        filteredByMaxDate = RealmHelper.findUsers(minDateFilter);
+        expect(filteredByMaxDate.length).toEqual(0);
+    });
+
+    it("should filter by max date interval", () => {
+        const intervalDateFilter: UserDateFilter = {
+            dobMin: 932871968,
+            dobMax: 932871970
+        };
+
+        let filteredByDateInterval: User[] = RealmHelper.findUsers(intervalDateFilter);
+        expect(filteredByDateInterval.length).toEqual(3);
+
+        intervalDateFilter.dobMin = 932871968;
+        intervalDateFilter.dobMax = 932871969;
+
+        filteredByDateInterval = RealmHelper.findUsers(intervalDateFilter);
+        expect(filteredByDateInterval.length).toEqual(2);
     });
 
 });
