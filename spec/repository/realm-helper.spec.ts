@@ -103,3 +103,30 @@ describe("deleteUser", () => {
     });
 
 });
+
+describe("updateUser", () => {
+
+    it("should update a user of the DB", () => {
+        const userBeforeUpdating = RealmHelper.getUserByUsername(TEST_USER.username);
+
+        const newEmail: string = "josemigallas@example.com";
+        expect(TEST_USER.email).not.toEqual(newEmail);
+        TEST_USER.email = newEmail;
+
+        RealmHelper.updateUser(TEST_USER);
+
+        const userAfterUpdating = RealmHelper.getUserByUsername(TEST_USER.username);
+        expect(userAfterUpdating.email).toEqual(newEmail);
+    });
+
+    it("should throw if trying to update a nonexistent user", () => {
+        const nonExistentUsername: string = "TheThing67";
+        expect(TEST_USER.username).not.toEqual(nonExistentUsername);
+
+        TEST_USER.username = nonExistentUsername;
+        const test = () => RealmHelper.updateUser(TEST_USER);
+
+        expect(test).toThrowError();
+    });
+
+});

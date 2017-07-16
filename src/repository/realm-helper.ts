@@ -65,16 +65,24 @@ export default class RealmHelper {
     // TODO get by filtering, not only primary key
 
     static addUser(user: User): User | void {
+        this.createUser(user, false);
+    }
+
+    static updateUser(user: User): User | void {
+        if (!this.getUserByUsername(user.username)) {
+            throw new Error(`User: ${user.username} does not exist`);
+        }
+
+        this.createUser(user, true);
+    }
+
+    private static createUser(user: User, update: boolean): User | void {
         const realm: Realm = this.defaultRealm;
 
         realm.write(() => {
-            return realm.create(UserSchema.name, user);
+            return realm.create(UserSchema.name, user, update);
         });
     }
-
-    // UPDATE
-    // Update can be done by "creating" an entity with the same primary key or retrieving it from the Realm
-    // and changing its properties
 
     static deleteUser(username: string): void {
         const realm = this.defaultRealm;
