@@ -30,7 +30,7 @@ export default class ApiTestClient {
         return request.post(options);
     }
 
-        public static updateUser(user: User): Promise<any> {
+    public static updateUser(user: User): Promise<any> {
         const options = {
             uri: `${this.URL}/users`,
             body: user,
@@ -40,4 +40,14 @@ export default class ApiTestClient {
 
         return request.put(options);
     }
+
+    public static deleteUser(username: string): Promise<any> {
+        const options = {
+            uri: `${this.URL}/users/${username}`,
+            resolveWithFullResponse: true
+        };
+
+        return request.delete(options);
+    }
+
 }

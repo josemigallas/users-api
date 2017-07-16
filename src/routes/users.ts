@@ -57,6 +57,18 @@ users.put("/", (req, res) => {
     }
 });
 
-// TODO Delete
+/**
+ * Deletes an existing user or throws an error if it doesn't.
+ */
+users.delete("/:username", (req, res) => {
+    const username: string = req.params.username;
+
+    if (!RealmHelper.getUserByUsername(username)) {
+        return res.status(404).send(`User: ${username} does not exist`);
+    }
+
+    RealmHelper.deleteUser(username);
+    res.status(200).send(`Successfuly delete: ${username}`);
+});
 
 export default users;

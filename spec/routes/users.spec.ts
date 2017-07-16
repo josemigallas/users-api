@@ -195,4 +195,40 @@ describe("Route users", () => {
         });
     });
 
+    describe("DELETE /users/:username", () => {
+
+        it("returns 200 if user has been successfully deleted", done => {
+            const user: User = RealmHelper.getUserByUsername("josemigallas");
+            expect(user).toBeTruthy();
+
+            ApiTestClient
+                .deleteUser("josemigallas")
+                .then(res => {
+                    expect(res.statusCode).toEqual(200);
+
+                    const user: User = RealmHelper.getUserByUsername("josemigallas");
+                    expect(user).toBeFalsy();
+
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+        });
+
+        it("returns 404 if user does not exist", done => {
+            ApiTestClient
+                .deleteUser("whatever")
+                .then(user => {
+                    fail("User should not exist");
+                    done();
+                })
+                .catch(err => {
+                    expect(err.statusCode).toEqual(404);
+                    done();
+                });
+        });
+    });
+
 });
