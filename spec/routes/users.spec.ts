@@ -25,7 +25,22 @@ describe("GET /users/:username", () => {
                 expect(user.username).toEqual("tinywolf709");
                 done();
             })
-            .catch(err => fail(err));
+            .catch(err => {
+                fail(err);
+                done();
+            });
     });
 
+    it("returns 404 if user does not exist", done => {
+        ApiTestClient
+            .getUserByUsername("whatever")
+            .then(user => {
+                fail("User should not exist");
+                done();
+            })
+            .catch(err => {
+                expect(err.statusCode).toEqual(404);
+                done();
+            });
+    });
 });
