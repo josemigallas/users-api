@@ -1,6 +1,7 @@
 import RealmHelper from "../../src/repository/realm-helper";
 
 import User from "../../src/model/user";
+import Location from "../../src/model/location";
 
 import UserSchema from "../../src/repository/schema/user-schema";
 import NameSchema from "../../src/repository/schema/name-schema";
@@ -127,6 +128,99 @@ describe("updateUser", () => {
         const test = () => RealmHelper.updateUser(TEST_USER);
 
         expect(test).toThrowError();
+    });
+
+});
+
+describe("getFilterQueryForUser", () => {
+
+    it("should return a well formed query with object's properties", () => {
+        const filter: User = {
+            gender: "male",
+            salt: "123456789",
+            email: "test@example.com"
+        };
+
+        let expectedQuery: string = `gender = "${filter.gender}" AND `;
+        expectedQuery += `salt = "${filter.salt}" AND `;
+        expectedQuery += `email = "${filter.email}"`;
+
+        expect(RealmHelper.getFilterQueryForUser(filter)).toEqual(expectedQuery);
+    });
+
+    it("should return a well formed query with object's inner objects", () => {
+        const location: Location = {
+            street: "123 Lie Av.",
+            city: "Nowhere",
+            state: "Solid",
+            zip: 12345
+        };
+
+        const filter: User = {
+            location
+        };
+
+        let expectedQuery: string = `location.street = "${location.street}" AND `;
+        expectedQuery += `location.city = "${location.city}" AND `;
+        expectedQuery += `location.state = "${location.state}" AND `;
+        expectedQuery += `location.zip = "${location.zip}"`;
+
+        expect(RealmHelper.getFilterQueryForUser(filter)).toEqual(expectedQuery);
+    });
+
+    it("should return a well formed query with object's properties and inner objects", () => {
+        const filter: User = {
+            gender: "male",
+            salt: "123456789",
+            email: "test@example.com",
+            location: {
+                street: "123 Lie Av.",
+                city: "Nowhere",
+                state: "Solid",
+                zip: 12345
+            }
+        };
+        let expectedQuery: string = `gender = "${filter.gender}" AND `;
+        expectedQuery += `salt = "${filter.salt}" AND `;
+        expectedQuery += `email = "${filter.email}" AND `;
+        expectedQuery += `location.street = "${filter.location.street}" AND `;
+        expectedQuery += `location.city = "${filter.location.city}" AND `;
+        expectedQuery += `location.state = "${filter.location.state}" AND `;
+        expectedQuery += `location.zip = "${filter.location.zip}"`;
+
+        expect(RealmHelper.getFilterQueryForUser(filter)).toEqual(expectedQuery);
+    });
+
+});
+
+describe("findUsers", () => {
+
+    it("should filter by location", () => {
+        const location: Location = {
+            street: "123 Lie Av."
+        };
+
+        const locationFilter: User = {
+            location
+        };
+
+        const filteredByLocation: User[] = RealmHelper.findUsers(locationFilter);
+        expect(filteredByLocation.length).toEqual(2);
+    });
+
+
+    it("should filter by genre", () => {
+        const genderFilter: User = {
+            gender: "male"
+        };
+
+        const filteredMales: User[] = RealmHelper.findUsers(genderFilter);
+        expect(filteredMales.length).toEqual(2);
+
+        genderFilter.gender = "female";
+
+        const filteredFemales: User[] = RealmHelper.findUsers(genderFilter);
+        expect(filteredFemales.length).toEqual(1);
     });
 
 });

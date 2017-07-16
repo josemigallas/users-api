@@ -62,7 +62,39 @@ export default class RealmHelper {
             .objectForPrimaryKey(UserSchema.name, username);
     }
 
-    // TODO get by filtering, not only primary key
+    static findUsers(filter: User): User[] {
+        const query: string = this.getFilterQueryForUser(filter);
+
+        const results: Realm.Results<User> = this.defaultRealm
+            .objects(UserSchema.name)
+            .filtered(query);
+
+        return Array.prototype.slice.call(results, 0, results.length);
+    }
+
+    static getFilterQueryForUser(user: User): string {
+        let query: string = "";
+
+        // TODO check if numbers must also be filtered within quotes
+        // "zip = '12345'" or "zip = 12345"
+        for (const key in user) {
+            if (typeof user[key] !== "object") {
+                if (user[key]) {
+                    query += `${key} = "${user[key]}" AND `;
+                }
+            } else {
+                for (const subkey in user[key]) {
+                    if (user[key][subkey]) {
+                        query += `${key}.${subkey} = "${user[key][subkey]}" AND `;
+                    }
+                }
+            }
+        }
+
+        query = query.slice(0, -5)
+
+        return query;
+    }
 
     static addUser(user: User): User | void {
         this.createUser(user, false);

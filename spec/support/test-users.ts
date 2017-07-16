@@ -62,7 +62,7 @@ export default [
         }
     },
     {
-        gender: "name",
+        gender: "male",
         name: {
             title: "Prince",
             first: "Thor",
