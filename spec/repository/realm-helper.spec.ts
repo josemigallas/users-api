@@ -2,6 +2,7 @@ import RealmHelper from "../../src/repository/realm-helper";
 
 import User from "../../src/model/user";
 import Location from "../../src/model/location";
+import Name from "../../src/model/name";
 
 import UserSchema from "../../src/repository/schema/user-schema";
 import NameSchema from "../../src/repository/schema/name-schema";
@@ -221,6 +222,34 @@ describe("findUsers", () => {
 
         const filteredFemales: User[] = RealmHelper.findUsers(genderFilter);
         expect(filteredFemales.length).toEqual(1);
+    });
+
+    it("should filter by name", () => {
+        const name: Name = {
+            last: "Gallas"
+        };
+
+        const nameFilter: User = {
+            name
+        };
+
+        const filteredByLastName: User[] = RealmHelper.findUsers(nameFilter);
+        expect(filteredByLastName.length).toEqual(2);
+
+        nameFilter.name.first = "Josemi";
+
+        const filteredByFirstAndLastName: User[] = RealmHelper.findUsers(nameFilter);
+        expect(filteredByFirstAndLastName.length).toEqual(1);
+
+        nameFilter.name.title = "Lord";
+
+        const filteredByFirstLastAndTitle: User[] = RealmHelper.findUsers(nameFilter);
+        expect(filteredByFirstAndLastName.length).toEqual(1);
+
+        nameFilter.name.title = "Mr";
+
+        const filteredByWrongTitle: User[] = RealmHelper.findUsers(nameFilter);
+        expect(filteredByWrongTitle.length).toEqual(0);
     });
 
 });
