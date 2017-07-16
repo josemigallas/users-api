@@ -14,7 +14,7 @@ import TestUsers from "../support/test-users";
 
 describe("RealmHelper", () => {
 
-    const TEST_USER = TestUsers[0];
+    const TEST_USER = JSON.parse(JSON.stringify(TestUsers[0]));
     const TEST_CONFIG: Realm.Configuration = {
         path: "database/test/users",
         schema: [
@@ -70,7 +70,7 @@ describe("RealmHelper", () => {
             const usersBeforeAddition = RealmHelper.getUsers();
             expect(usersBeforeAddition.length).toEqual(TestUsers.length);
 
-            const newUser: User = TestUsers[0];
+            const newUser: User = JSON.parse(JSON.stringify(TEST_USER));
             newUser.username = "spiderman1991";
             RealmHelper.addUser(newUser);
 
