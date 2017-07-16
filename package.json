@@ -5,8 +5,9 @@
   "scripts": {
     "start": "node dist/src/server.js",
     "postinstall": "node_modules/typescript/bin/tsc -p . && cp src/repository/seed.json dist/src/repository/",
-    "test": "tsc && jasmine",
-    "posttest": "rm -r database/test"
+    "test": "node_modules/typescript/bin/tsc -p . && node_modules/.bin/jasmine",
+    "posttest": "rm -r database/test",
+    "clean": "rm -r node_modules database realm-object-server dist"
   },
   "repository": {
     "type": "git",
@@ -19,11 +20,14 @@
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "realm": "^1.10.0",
+    "request-promise-native": "^1.0.4",
     "typescript": "^2.4.1"
   },
   "devDependencies": {
+    "@types/express": "^4.0.36",
     "@types/jasmine": "^2.5.53",
     "@types/realm": "^1.0.3",
+    "@types/request-promise-native": "^1.0.6",
     "jasmine": "^2.6.0"
   }
 }
