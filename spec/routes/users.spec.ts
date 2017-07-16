@@ -15,3 +15,17 @@ describe("GET /users", () => {
     });
 
 });
+
+describe("GET /users/:username", () => {
+
+    it("returns a user if it exists", done => {
+        ApiTestClient
+            .getUserByUsername("tinywolf709")
+            .then(user => {
+                expect(user.username).toEqual("tinywolf709");
+                done();
+            })
+            .catch(err => fail(err));
+    });
+
+});

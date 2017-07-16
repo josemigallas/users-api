@@ -10,7 +10,12 @@ export default class ApiTestClient {
     private static readonly URL: string = "http://localhost:3000";
 
     public static getUsers(): Promise<User[]> {
-        return request.get(this.URL + "/users")
+        return request.get(`${this.URL}/users`)
+            .then(JSON.parse);
+    }
+
+    public static getUserByUsername(username: string): Promise<User> {
+        return request.get(`${this.URL}/users/${username}`)
             .then(JSON.parse);
     }
 
