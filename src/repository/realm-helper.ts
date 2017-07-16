@@ -34,7 +34,11 @@ export default class RealmHelper {
         return this._config;
     }
 
-    public static init(): void {
+    public static init(development = false): void {
+        if (development) {
+            this._config.path = "database/test/users";
+        }
+
         const realm = this.defaultRealm;
 
         if (!realm.empty) {
@@ -133,7 +137,4 @@ export default class RealmHelper {
         })
     }
 
-    // TODO delete by filtering, not only primary key
-
-    // LIST
 }

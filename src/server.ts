@@ -16,8 +16,8 @@ app.use("/users", users);
 // Realm configuration
 import RealmHelper from "./repository/realm-helper";
 
-RealmHelper.init();
+RealmHelper.init(process.env.ENV_NODE === "development");
 
 app.listen(3000, () => {
-    console.log("Users API listening on port 3000...");
+    console.log(`Users API listening on port 3000 in ${process.env.ENV_NODE} mode`);
 })
