@@ -34,7 +34,11 @@ export default class RealmHelper {
         return this._config;
     }
 
-    public static init(): void {
+    public static init(development = false): void {
+        if (development) {
+            this._config.path = "database/test/users";
+        }
+
         const realm = this.defaultRealm;
 
         if (!realm.empty) {
@@ -75,6 +79,7 @@ export default class RealmHelper {
     static getFilterQueryForUser(user: User): string {
         let query: string = "";
 
+        // TODO refactor this kamehameha
         for (const key in user) {
             if (typeof user[key] !== "object") {
                 if (user[key]) {
@@ -101,22 +106,32 @@ export default class RealmHelper {
     }
 
     static addUser(user: User): User | void {
-        this.createUser(user, false);
-    }
-
-    static updateUser(user: User): User | void {
-        if (!this.getUserByUsername(user.username)) {
-            throw new Error(`User: ${user.username} does not exist`);
-        }
-
-        this.createUser(user, true);
-    }
-
-    private static createUser(user: User, update: boolean): User | void {
         const realm: Realm = this.defaultRealm;
 
         realm.write(() => {
-            return realm.create(UserSchema.name, user, update);
+            return realm.create(UserSchema.name, user, false);
+        });
+    }
+
+    static updateUser(newUser: User): User | void {
+        const user: User = this.getUserByUsername(newUser.username);
+
+        if (!user) {
+            throw new Error(`User: ${newUser.username} does not exist`);
+        }
+
+        const assignEach = (values, object) => {
+            for (const key in values) {
+                if (typeof values[key] !== "object" && key !== "username") {
+                    object[key] = values[key];
+                } else {
+                    assignEach(values[key], object[key]);
+                }
+            }
+        }
+
+        this.defaultRealm.write(() => {
+            assignEach(newUser, user);
         });
     }
 
@@ -133,7 +148,4 @@ export default class RealmHelper {
         })
     }
 
-    // TODO delete by filtering, not only primary key
-
-    // LIST
 }
