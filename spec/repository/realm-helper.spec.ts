@@ -209,7 +209,7 @@ describe("findUsers", () => {
     });
 
 
-    it("should filter by genre", () => {
+    it("should filter by gender", () => {
         const genderFilter: User = {
             gender: "male"
         };
