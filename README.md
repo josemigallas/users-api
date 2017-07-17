@@ -1,4 +1,4 @@
-# Users RESTful API
+# Users RESTful API[ ![Codeship Status for josemigallas/users-api](https://app.codeship.com/projects/017055e0-4b1b-0135-9499-6a83b1829c88/status?branch=master)](https://app.codeship.com/projects/232759)
 This API allows all CRUDL operations over the dataset hosted in https://gist.githubusercontent.com/jasonmadigan/009c15b5dc4b4eccd32b/raw/34759c44e77d2f3515e20ed561cdd7a5e8345585/users.json.
 
 ## Reference
