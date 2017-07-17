@@ -1,4 +1,7 @@
 # Users RESTful API[ ![Codeship Status for josemigallas/users-api](https://app.codeship.com/projects/017055e0-4b1b-0135-9499-6a83b1829c88/status?branch=master)](https://app.codeship.com/projects/232759)
+
+> :warning: :alien: Due to [this Request issue](https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18074) transpilation is failing. It is necessary to fix the bug manually in node_modules/@types/request/typings.d.ts first time after doing an npm install. This is what's causing the failure at deployment on Heroku and testing with Codeship.
+
 This API allows all CRUDL operations over the dataset hosted in https://gist.githubusercontent.com/jasonmadigan/009c15b5dc4b4eccd32b/raw/34759c44e77d2f3515e20ed561cdd7a5e8345585/users.json.
 
 ## Reference
