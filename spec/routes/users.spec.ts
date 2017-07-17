@@ -50,7 +50,308 @@ describe("Route users", () => {
                     expect(users.length).toEqual(TestUsers.length);
                     done();
                 })
-                .catch(err => fail(err));
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+        });
+
+        it("should filter by location", done => {
+            const locationFilter: User = {
+                location: {
+                    street: "123 Lie Av."
+                }
+            };
+
+            ApiTestClient
+                .filterUsers(locationFilter)
+                .then(users => {
+                    expect(users.length).toEqual(2);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+        });
+
+        it("should return 400 if trying to filter with wrong parameters", done => {
+            const wrongFilter: any = {
+                street: "123 Lie Av."
+            };
+
+            ApiTestClient
+                .filterUsers(wrongFilter)
+                .then(users => {
+                    fail("It should have not filtered");
+                    done();
+                })
+                .catch(err => {
+                    expect(err.statusCode).toEqual(400);
+                    done();
+                });
+        });
+
+        it("should filter by gender", done => {
+            const genderFilter: User = {
+                gender: "male"
+            };
+
+            ApiTestClient
+                .filterUsers(genderFilter)
+                .then(users => {
+                    expect(users.length).toEqual(2);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            genderFilter.gender = "female";
+
+            ApiTestClient
+                .filterUsers(genderFilter)
+                .then(users => {
+                    expect(users.length).toEqual(1);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+        });
+
+        it("should filter by name", done => {
+            const nameFilter: User = {
+                name: {
+                    last: "Gallas"
+                }
+            };
+
+            ApiTestClient
+                .filterUsers(nameFilter)
+                .then(users => {
+                    expect(users.length).toEqual(2);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            nameFilter.name.first = "Josemi";
+
+            ApiTestClient
+                .filterUsers(nameFilter)
+                .then(users => {
+                    expect(users.length).toEqual(1);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            nameFilter.name.title = "Lord";
+
+            ApiTestClient
+                .filterUsers(nameFilter)
+                .then(users => {
+                    expect(users.length).toEqual(1);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            nameFilter.name.title = "Mr";
+
+            ApiTestClient
+                .filterUsers(nameFilter)
+                .then(users => {
+                    expect(users.length).toEqual(0);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+        });
+
+        it("should filter by zip code", done => {
+            const zipFilter: User = {
+                location: { zip: 12345 }
+            };
+
+            ApiTestClient
+                .filterUsers(zipFilter)
+                .then(users => {
+                    expect(users.length).toEqual(2);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            zipFilter.location.zip = 99999;
+
+            ApiTestClient
+                .filterUsers(zipFilter)
+                .then(users => {
+                    expect(users.length).toEqual(1);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+        });
+
+        it("should filter by max date", done => {
+            const maxDateFilter: UserDateFilter = {
+                dobMax: 932871967
+            };
+
+            ApiTestClient
+                .filterUsers(maxDateFilter)
+                .then(users => {
+                    expect(users.length).toEqual(0);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            maxDateFilter.dobMax = 932871968;
+
+            ApiTestClient
+                .filterUsers(maxDateFilter)
+                .then(users => {
+                    expect(users.length).toEqual(1);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            maxDateFilter.dobMax = 932871969;
+
+            ApiTestClient
+                .filterUsers(maxDateFilter)
+                .then(users => {
+                    expect(users.length).toEqual(2);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            maxDateFilter.dobMax = 932871970;
+
+            ApiTestClient
+                .filterUsers(maxDateFilter)
+                .then(users => {
+                    expect(users.length).toEqual(3);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+        });
+
+        it("should filter by min date", done => {
+            const minDateFilter: UserDateFilter = {
+                dobMin: 932871968
+            };
+
+            ApiTestClient
+                .filterUsers(minDateFilter)
+                .then(users => {
+                    expect(users.length).toEqual(3);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            minDateFilter.dobMin = 932871969;
+
+            ApiTestClient
+                .filterUsers(minDateFilter)
+                .then(users => {
+                    expect(users.length).toEqual(2);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            minDateFilter.dobMin = 932871970;
+
+            ApiTestClient
+                .filterUsers(minDateFilter)
+                .then(users => {
+                    expect(users.length).toEqual(1);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            minDateFilter.dobMin = 932871971;
+
+            ApiTestClient
+                .filterUsers(minDateFilter)
+                .then(users => {
+                    expect(users.length).toEqual(0);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+        });
+
+        it("should filter by max date interval", done => {
+            const intervalDateFilter: UserDateFilter = {
+                dobMin: 932871968,
+                dobMax: 932871970
+            };
+
+            ApiTestClient
+                .filterUsers(intervalDateFilter)
+                .then(users => {
+                    expect(users.length).toEqual(3);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
+
+            intervalDateFilter.dobMin = 932871968;
+            intervalDateFilter.dobMax = 932871969;
+
+            ApiTestClient
+                .filterUsers(intervalDateFilter)
+                .then(users => {
+                    expect(users.length).toEqual(2);
+                    done();
+                })
+                .catch(err => {
+                    fail(err);
+                    done();
+                });
         });
 
     });
