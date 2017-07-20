@@ -18,7 +18,7 @@ import RealmHelper from "./repository/realm-helper";
 
 RealmHelper.init(process.env.ENV_NODE === "development");
 
-const PORT = process.env.ENV_NODE || 3000;
-app.listen(3000, () => {
-    console.log(`Users API listening on port ${PORT} in ${process.env.ENV_NODE} mode`);
-})
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Users API listening on port ${port} in ${process.env.ENV_NODE} mode`);
+});
