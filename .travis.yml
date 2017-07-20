@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "4"
+env:
+  - ENV_NODE="development"
+before_script:
+  - npm install
+script:
+  - node dist/src/server.js &
+  - npm test
