@@ -9,6 +9,8 @@ import User from '../model/user';
 /**
  * Helper class that setup the Realm DB and serves as data access layer.
  */
+import Seed from "../assets/seed";
+
 export default class RealmHelper {
 
     private static _realm: Realm;
@@ -45,10 +47,8 @@ export default class RealmHelper {
             return;
         }
 
-        const users: User[] = require("./seed.json").users;
-
         realm.write(() => {
-            for (const user of users) {
+            for (const user of Seed) {
                 realm.create(UserSchema.name, user);
             }
         });
