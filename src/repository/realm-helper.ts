@@ -34,8 +34,8 @@ export default class RealmHelper {
         return this._config;
     }
 
-    public static init(development): void {
-        if (development) {
+    public static init(mode: string): void {
+        if (mode === "development") {
             this._config.path = "database/test/users";
         }
 
