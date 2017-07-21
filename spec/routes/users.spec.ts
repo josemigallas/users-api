@@ -1,4 +1,5 @@
 import RealmHelper from "../../src/repository/realm-helper";
+import Sleep from "../../src/utils/sleep";
 
 import User from "../../src/model/user";
 import UserDateFilter from "../../src/model/user-date-filter";
@@ -504,8 +505,10 @@ describe("Route users", () => {
 
             ApiTestClient
                 .deleteUser("josemigallas")
-                .then(res => {
+                .then(async res => {
                     expect(res.statusCode).toEqual(200);
+
+                    await Sleep.millis(200);
 
                     const user: User = RealmHelper.getUserByUsername("josemigallas");
                     expect(user).toBeFalsy();
