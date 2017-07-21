@@ -28,5 +28,8 @@
     "realm": "^1.10.0",
     "request-promise-native": "^1.0.4",
     "typescript": "^2.4.1"
+  },
+  "engines": {
+    "node": "4.4.7"
   }
 }
