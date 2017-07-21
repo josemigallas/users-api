@@ -2,7 +2,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 
 // Constants
-const port: number = process.env.PORT || 3000;
+const port: string = process.env.PORT || "3000";
 const mode: string = process.env.ENV_NODE || "development";
 
 // Server app definitions

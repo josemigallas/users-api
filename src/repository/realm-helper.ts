@@ -45,7 +45,7 @@ export default class RealmHelper {
             return;
         }
 
-        const users: User[] = require("./seed.json").users;
+        const users: User[] = require("../assets/seed.json").users;
 
         realm.write(() => {
             for (const user of users) {
