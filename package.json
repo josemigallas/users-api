@@ -1,13 +1,12 @@
 {
   "name": "users-api",
   "version": "0.1.0",
-  "description": "This API allows all RESTL operations over the dataset hosted in https://gist.githubusercontent.com/jasonmadigan/009c15b5dc4b4eccd32b/raw/34759c44e77d2f3515e20ed561cdd7a5e8345585/users.json.",
+  "description": "This API allows all CRUDL operations over the dataset hosted in https://gist.githubusercontent.com/jasonmadigan/009c15b5dc4b4eccd32b/raw/34759c44e77d2f3515e20ed561cdd7a5e8345585/users.json.",
   "scripts": {
     "start": "node dist/src/server.js",
     "postinstall": "node_modules/typescript/bin/tsc -p . && cp src/repository/seed.json dist/src/repository/",
     "test": "node_modules/.bin/jasmine",
-    "posttest": "rm -r database/test",
-    "clean": "rm -r node_modules database realm-object-server dist"
+    "clean": "rm -rf node_modules database realm-object-server dist"
   },
   "repository": {
     "type": "git",
@@ -17,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^8.0.13",
+    "@types/request": "^2.0.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "realm": "^1.10.0",

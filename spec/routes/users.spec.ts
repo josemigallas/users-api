@@ -1,4 +1,5 @@
 import RealmHelper from "../../src/repository/realm-helper";
+import Sleep from "../../src/utils/sleep";
 
 import User from "../../src/model/user";
 import UserDateFilter from "../../src/model/user-date-filter";
@@ -390,13 +391,24 @@ describe("Route users", () => {
         const newUser: User = JSON.parse(JSON.stringify(TEST_USER));
         newUser.username = "newUser";
 
-        it("returns 201 if the user is succesfully created", done => {
+        it("returns 201 if the user is succesfully created", async done => {
             RealmHelper.deleteUser(newUser.username);
+
+            await Sleep.millis(200);
+
+            const user: User = RealmHelper.getUserByUsername(newUser.username);
+            expect(user).toBeFalsy();
 
             ApiTestClient
                 .createUser(newUser)
-                .then(res => {
+                .then(async res => {
                     expect(res.statusCode).toEqual(201);
+
+                    await Sleep.millis(200);
+
+                    const createdUser: User = RealmHelper.getUserByUsername(newUser.username);
+                    expect(createdUser).toBeTruthy();
+
                     done();
                 })
                 .catch(err => {
@@ -432,8 +444,10 @@ describe("Route users", () => {
 
             ApiTestClient
                 .updateUser(userToUpdate)
-                .then(res => {
+                .then(async res => {
                     expect(res.statusCode).toEqual(200);
+
+                    await Sleep.millis(200);
 
                     const userAfterUpdating: User = RealmHelper.getUserByUsername(userToUpdate.username);
                     expect(userAfterUpdating.email).toEqual(userToUpdate.email);
@@ -461,8 +475,10 @@ describe("Route users", () => {
 
             ApiTestClient
                 .updateUser(userToUpdate)
-                .then(res => {
+                .then(async res => {
                     expect(res.statusCode).toEqual(200);
+
+                    await Sleep.millis(200);
 
                     const userAfterUpdating: User = RealmHelper.getUserByUsername(userToUpdate.username);
                     expect(userAfterUpdating.location.city).toEqual(userToUpdate.location.city);
@@ -504,8 +520,10 @@ describe("Route users", () => {
 
             ApiTestClient
                 .deleteUser("josemigallas")
-                .then(res => {
+                .then(async res => {
                     expect(res.statusCode).toEqual(200);
+
+                    await Sleep.millis(200);
 
                     const user: User = RealmHelper.getUserByUsername("josemigallas");
                     expect(user).toBeFalsy();
