@@ -7,7 +7,7 @@ import User from "../model/user";
 const index: Router = Router();
 
 index.get("/", (req, res) => {
-    res.send("Hello from Users API!");
+    res.send(`Hello from Users API v${process.env.npm_package_version}!`);
 });
 
 export default index;

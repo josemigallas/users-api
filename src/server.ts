@@ -1,6 +1,10 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
 
+// Constants
+const port: string = process.env.PORT || "3000";
+const mode: string = process.env.ENV_NODE || "development";
+
 // Server app definitions
 const app: express.Express = express();
 
@@ -16,8 +20,8 @@ app.use("/users", users);
 // Realm configuration
 import RealmHelper from "./repository/realm-helper";
 
-RealmHelper.init(process.env.ENV_NODE === "development");
+RealmHelper.init(mode);
 
-app.listen(3000, () => {
-    console.log(`Users API listening on port 3000 in ${process.env.ENV_NODE} mode`);
-})
+app.listen(port, () => {
+    console.log(`Users API v${process.env.npm_package_version} listening on port ${port} in ${process.env.ENV_NODE} mode`);
+});
