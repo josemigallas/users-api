@@ -34,7 +34,7 @@ export default class RealmHelper {
         return this._config;
     }
 
-    public static init(mode: string): void {
+    public static init(mode = "development"): void {
         let users: User[];
 
         if (mode === "development") {
