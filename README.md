@@ -33,3 +33,11 @@ Then, open a different terminal and simply run:
 ```
 $ npm test
 ```
+
+## CI / CD
+Continuous integration it's been done by [Travis CI](https://travis-ci.org/josemigallas/users-api). It tracks every push and PR and un the full test suite.
+
+Additionally, the app is being deployed on Heroku, both in development (when changes are pushed to `dev`) and production (when commits are merged into `master`).
+
+Development deployment -> https://screener-users-api-development.herokuapp.com/
+Production deployment -> https://screener-users-api.herokuapp.com/users
