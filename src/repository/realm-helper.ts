@@ -35,8 +35,13 @@ export default class RealmHelper {
     }
 
     public static init(mode: string): void {
+        let users: User[];
+
         if (mode === "development") {
             this._config.path = "database/test/users";
+            users = require("../../spec/support/test-users").default;
+        } else {
+            users = require("../assets/seed.json").users;
         }
 
         const realm = this.defaultRealm;
@@ -44,8 +49,6 @@ export default class RealmHelper {
         if (!realm.empty) {
             return;
         }
-
-        const users: User[] = require("../assets/seed.json").users;
 
         realm.write(() => {
             for (const user of users) {
