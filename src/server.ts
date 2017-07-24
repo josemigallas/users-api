@@ -23,5 +23,5 @@ import RealmHelper from "./repository/realm-helper";
 RealmHelper.init(mode);
 
 app.listen(port, () => {
-    console.log(`Users API v${process.env.npm_package_version} listening on port ${port} in ${process.env.ENV_NODE} mode`);
+    console.log(`Users API v${process.env.npm_package_version} listening on port ${port} in ${mode} mode`);
 });

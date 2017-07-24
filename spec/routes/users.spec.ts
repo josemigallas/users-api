@@ -29,6 +29,9 @@ describe("Route users", () => {
 
     beforeAll(() => {
         spyOnProperty(RealmHelper, "config", "get").and.returnValue(TEST_CONFIG);
+
+        // Starts the server in order to run integration tests
+        require("../../src/server");
     });
 
     beforeEach(() => {
