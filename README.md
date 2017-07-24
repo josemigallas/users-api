@@ -32,4 +32,4 @@ Continuous integration it's been done by [Travis CI](https://travis-ci.org/josem
 Additionally, the app is being deployed on Heroku, both in development (when changes are pushed to `dev`) and production (when commits are merged into `master`).
 
 Development deployment -> https://screener-users-api-development.herokuapp.com/
-Production deployment -> https://screener-users-api.herokuapp.com/users
+Production deployment -> https://screener-users-api-production.herokuapp.com/
